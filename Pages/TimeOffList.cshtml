@@ -1,0 +1,64 @@
+﻿@page "/list"
+@using Microsoft.AspNetCore.Authorization
+@using TimeOffApp.Models
+@using TimeOffApp.Pages
+@attribute [Authorize]
+@model TimeOffListModel
+@{
+    ViewData["Title"] = "List of time offs";
+}
+<div class="space-y-4">
+    <div class="space-y-5">
+        <h1 class="text-red text-center text-xl">Time Off</h1>
+        <div class="h-[1.5px] w-full bg-gray-300 shadow-md"></div>
+    </div>
+    <div class="px-2">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Assignee</th>
+                    <th scope="col">Reason</th>
+                    <th scope="col">From</th>
+                    <th scope="col">To</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Aproved By</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.TimeOffs)
+                {
+                    <tr>
+                        <th scope="row">@item.Id</th>
+                        <td>@item.Assignee</td>
+                        <td class="max-w-sm">@item.Reason</td>
+                        <td>@item.From</td>
+                        <td>@item.To</td>
+                        <td>@item.Status</td>
+                        <td>@(item.ApprovedById is not null ? $"{item.ApprovedBy!.Firstname} {item.ApprovedBy.Lastname}" : "None")</td>
+                        @if (item.Status == TimeOffStatus.Pending || string.IsNullOrEmpty(item.Status))
+                        {
+                            <td>
+                                <div class="flex space-x-2">
+                                    <form asp-page-handler="Aprove" method="post">
+                                        <button class="btn btn-secondary">Aprove</button>
+                                        <input type="hidden" name="id" value="@item.Id" />
+                                    </form>
+                                    <form asp-page-handler="Reject" method="post">
+                                        <button class="btn btn-danger">Reject</button>
+                                        <input type="hidden" name="id" value="@item.Id" />
+                                    </form>
+                                </div>
+                            </td>
+                        }
+                        else
+                        {
+                            <td>@item.Status</td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

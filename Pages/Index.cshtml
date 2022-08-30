@@ -1,0 +1,94 @@
+﻿@page
+@using Microsoft.AspNetCore.Authorization
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="space-y-4">
+    <div class="space-y-5">
+        <h1 class="text-red text-center text-xl">Time Off</h1>
+        <div class="h-[1.5px] w-full bg-gray-300 shadow-md"></div>
+    </div>
+    @if(Model.TimeOff.Id <= 0)
+    {
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <form method="post" class="container text-center mt-5 space-y-6">
+            <label class="row">
+                <p class="col-4 align-middle">Subject</p>
+                <div class="col-8 align-middle max-w-lg">
+                    <input asp-for="TimeOff.Subject" placeholder="eg. Vacation" class="form-control rounded-pill shadow" autocomplete="subject" aria-required="true" />
+                    <span asp-validation-for="TimeOff.Subject" class="text-danger"></span>
+                </div>
+            </label>
+            <label class="row">
+                <p class="col-4 align-middle">Assignee</p>
+                <div class="col-8 align-middle max-w-lg">
+                    <select asp-for="TimeOff.Assignee" class="form-control rounded-pill shadow" asp-items="Model.Assignees"></select>
+                    <span asp-validation-for="TimeOff.Assignee" class="text-danger"></span>
+                </div>
+            </label>
+            <label class="row">
+                <p class="col-4 align-middle">Reason</p>
+                <div class="col-8 align-middle max-w-lg">
+                    <textarea asp-for="TimeOff.Reason" placeholder="Describe the reason" class="form-control rounded-2 bg-gray-400 min-h-[2rem] shadow" autocomplete="reason" aria-required="true"></textarea>
+                    <span asp-validation-for="TimeOff.Reason" class="text-danger"></span>
+                </div>
+            </label>
+            <div class="row">
+                <p class="col-4 align-middle">Select a date</p>
+                <div class="col-8 gap-2 row align-middle max-w-lg">
+                    <label class="col-6 row">
+                        <p class="col-4 align-middle">From</p>
+                        <div class="col-8 align-middle">
+                            <input type="date" asp-for="TimeOff.From" placeholder="Date" class="min-w-[8rem] form-control rounded-pill shadow" />
+                            <span asp-validation-for="TimeOff.From" class="text-danger"></span>
+                        </div>
+                    </label>
+                    <label class="col-6 row">
+                        <p class="col-4 align-middle">To</p>
+                        <div class="col-8 align-middle">
+                            <input type="date" asp-for="TimeOff.To" placeholder="Date" class="min-w-[8rem] form-control rounded-pill shadow" />
+                            <span asp-validation-for="TimeOff.To" class="text-danger"></span>
+                        </div>
+                    </label>
+                </div>
+
+            </div>
+            <div class="row">
+                <p class="col-4 align-middle">Select a time</p>
+                <div class="col-8 gap-2 row align-middle max-w-lg">
+                    <label class="col-6 row">
+                        <p class="col-4 align-middle">From</p>
+                        <div class="col-8 align-middle">
+                            <input type="time" asp-for="TimeOff.From" placeholder="Time" class="min-w-[8rem] form-control rounded-pill shadow" />
+                            <span asp-validation-for="TimeOff.From" class="text-danger"></span>
+                        </div>
+                    </label>
+                    <label class="col-6 row">
+                        <p class="col-4 align-middle">To</p>
+                        <div class="col-8 align-middle">
+                            <input type="time" asp-for="TimeOff.To" placeholder="Time" class="min-w-[8rem] form-control rounded-pill shadow" />
+                            <span asp-validation-for="TimeOff.To" class="text-danger"></span>
+                        </div>
+                    </label>
+                </div>
+
+            </div>
+            <div class="flex items-center justify-center">
+                <button type="submit" class="w-[10rem] col-6 btn btn-lg btn-primary bg-blue-500 rounded-pill">Save</button>
+                <button class="w-[10rem] col-6 btn btn-lg btn-outline-primary rounded-pill mx-2">Cancel</button>
+            </div>
+        </form>
+    }
+    else
+    {
+        <form class="space-y-2 max-w-lg text-center">
+            <h1>Request @(Model.TimeOff.Id) has been submitted</h1>
+            <button class="btn btn-primary bg-blue-500">New Request</button>
+        </form>
+    }
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
